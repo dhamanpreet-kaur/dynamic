@@ -9,7 +9,7 @@
 #SBATCH -J cmr_s1
 
 # activate conda environment
-conda activate dynamic
+source activate dynamic
 
 echonet segmentation --save_video
 echonet video
