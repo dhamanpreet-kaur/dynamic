@@ -9,6 +9,7 @@
 #SBATCH -J cmr_s1
 
 # activate conda environment
+module load system mesa
 source activate dynamic
 
 echonet segmentation --save_video
