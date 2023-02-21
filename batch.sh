@@ -9,9 +9,9 @@
 #SBATCH -J cmr_s1
 
 # activate conda environment
-conda activate dynamic
+source activate dynamic
 
-echonet video --weights /scratch/users/dkaur24/dynamic/output/video/r2plus1d_18_32_2_pretrained/best.pt --run_test --num_epochs 1
+echonet video --weights /scratch/users/dkaur24/dynamic/output/video/r2plus1d_18_32_2_pretrained/best.pt --run_test --num_epochs 1 --batch_size 10
 
 
 
