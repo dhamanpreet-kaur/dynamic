@@ -8,7 +8,7 @@ library(scales)
 library(ggthemes)
 library(Metrics)
 
-data <- read.csv("r2plus1d_18_32_2_pretrained_test_predictions.csv", header = FALSE)
+data <- read.csv("/scratch/users/dkaur24/dynamic/output/video/r2plus1d_18_32_2_pretrained/test_predictions.csv", header = FALSE)
 str(data)
 
 
