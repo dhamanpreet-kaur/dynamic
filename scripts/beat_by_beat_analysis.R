@@ -35,7 +35,7 @@ beatByBeat <- beatByBeat %>% group_by(Filename) %>% summarize(meanPrediction = m
 str(beatByBeat)
 
 ### For use, need to specify file directory
-fileLocation <- "/Users/davidouyang/Local Medical Data/"
+fileLocation <- "a4c-video-dir/"
 ActualNumbers <- read.csv(paste0(fileLocation, "FileList.csv", sep = ""))
 ActualNumbers <- ActualNumbers[c(1,2)]
 str(ActualNumbers)
