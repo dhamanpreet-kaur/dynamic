@@ -7,6 +7,7 @@ library(reshape2)
 library(scales)
 library(ggthemes)
 library(Metrics)
+library(readxl)
 
 #setwd("/Users/dkaur/Library/CloudStorage/Box-Box/private_files/hiesinger_lab/dynamic")
 setwd("/scratch/users/dkaur24/dynamic")
