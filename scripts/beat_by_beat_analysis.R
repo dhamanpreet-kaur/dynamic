@@ -8,7 +8,8 @@ library(scales)
 library(ggthemes)
 library(Metrics)
 
-setwd("/scratch/users/dkaur24/dynamic/")
+#setwd("/Users/dkaur/Library/CloudStorage/Box-Box/private_files/hiesinger_lab/dynamic")
+setwd("/scratch/users/dkaur24/dynamic")
 data <- read.csv("output/video/r2plus1d_18_32_2_pretrained/test_predictions.csv", header = FALSE)
 str(data)
 
@@ -32,17 +33,17 @@ sizeRelevantFrames[sizeRelevantFrames$Frame < 0,]$Frame <- 0
 
 beatByBeat <- merge(sizeRelevantFrames, data, by.x = c("Filename", "Frame"), by.y = c("V1", "V2"))
 beatByBeat <- beatByBeat %>% group_by(Filename) %>% summarize(meanPrediction = mean(V3), sdPred = sd(V3))
+beatByBeat$FileName <- gsub(".avi","",beatByBeat$Filename)
 str(beatByBeat)
 
 ### For use, need to specify file directory
-fileLocation <- "a4c-video-dir/"
-ActualNumbers <- read.csv(paste0(fileLocation, "FileList.csv", sep = ""))
+ActualNumbers <- read_excel("a4c-video-dir/FileList.xlsx")
 ActualNumbers <- ActualNumbers[c(1,2)]
 str(ActualNumbers)
 
 
-
-dataNoAugmentation <- merge(dataNoAugmentation, ActualNumbers, by.x = "V1", by.y = "Filename", all.x = TRUE)
+dataNoAugmentation$FileName <- gsub(".avi","",dataNoAugmentation$V1)
+dataNoAugmentation <- merge(dataNoAugmentation, ActualNumbers, all.x = TRUE)
 dataNoAugmentation$AbsErr <- abs(dataNoAugmentation$V3 - dataNoAugmentation$EF)
 str(dataNoAugmentation)
 
@@ -57,7 +58,7 @@ summary(modelNoAugmentation)$r.squared
 # 0.79475
 
 
-beatByBeat <- merge(beatByBeat, ActualNumbers, by.x = "Filename", by.y = "Filename", all.x = TRUE)
+beatByBeat <- merge(beatByBeat, ActualNumbers, all.x = TRUE)
 summary(abs(beatByBeat$meanPrediction - beatByBeat$EF))
 # Mean of 4.051697
 
@@ -77,13 +78,15 @@ MAEdata <- data.frame(counter = 1:500)
 MAEdata$sample <- -9999
 MAEdata$error <- -9999
 
+
 str(MAEdata)
 
 for (i in 1:500){
 
 
 samplingBeat <-  sample_n(beatByBeatAnalysis %>% group_by(Filename), 1 + floor((i-1)/100), replace = TRUE) %>% group_by(Filename) %>% dplyr::summarize(meanPred = mean(V3))
-samplingBeat <- merge(samplingBeat, ActualNumbers, by.x = "Filename", by.y = "Filename", all.x = TRUE)
+samplingBeat$FileName <- gsub(".avi","",samplingBeat$Filename)
+samplingBeat <- merge(samplingBeat, ActualNumbers, all.x = TRUE)
 samplingBeat$error <- abs(samplingBeat$meanPred - samplingBeat$EF)
 
 MAEdata$sample[i] <-  1 + floor((i-1)/100)
@@ -98,4 +101,17 @@ beatBoxPlot <- ggplot(data = MAEdata) + geom_boxplot(aes(x = sample, y = error, 
 ) + theme_classic() + theme(legend.position = "none", axis.text.y = element_text( size=7)) + xlab("Number of Sampled Beats") + ylab("Mean Absolute Error") + scale_fill_brewer(palette = "Set1", direction = -1) 
 
 beatBoxPlot
+
+
+## additional analyses ##
+# error in EF prediction as a function of EF
+df <- dataNoAugmentation
+df <- df %>%
+  mutate(EF_level = cut(EF, breaks = c(0, 40, 50, 100)))
+
+summarise(group_by(df, EF_level), 
+          'MAE' = mean(AbsErr),
+          'Count' = n())
+
+
 
