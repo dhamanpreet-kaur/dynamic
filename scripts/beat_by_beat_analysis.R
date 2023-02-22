@@ -8,7 +8,8 @@ library(scales)
 library(ggthemes)
 library(Metrics)
 
-data <- read.csv("/scratch/users/dkaur24/dynamic/output/video/r2plus1d_18_32_2_pretrained/test_predictions.csv", header = FALSE)
+setwd("/scratch/users/dkaur24/dynamic/")
+data <- read.csv("output/video/r2plus1d_18_32_2_pretrained/test_predictions.csv", header = FALSE)
 str(data)
 
 
@@ -20,7 +21,7 @@ dataGlobalAugmentation <- data %>% group_by(V1) %>% summarize(meanPrediction = m
 str(dataGlobalAugmentation)
 
 
-sizeData <- read.csv("size.csv")
+sizeData <- read.csv("output/deeplabv3_resnet50_random/size.csv")
 sizeData <- sizeData[sizeData$ComputerSmall == 1,]
 str(sizeData)
 
