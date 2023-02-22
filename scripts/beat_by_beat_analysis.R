@@ -21,7 +21,7 @@ dataGlobalAugmentation <- data %>% group_by(V1) %>% summarize(meanPrediction = m
 str(dataGlobalAugmentation)
 
 
-sizeData <- read.csv("output/deeplabv3_resnet50_random/size.csv")
+sizeData <- read.csv("output/segmentation/deeplabv3_resnet50_random/size.csv")
 sizeData <- sizeData[sizeData$ComputerSmall == 1,]
 str(sizeData)
 
